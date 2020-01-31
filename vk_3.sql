@@ -4,28 +4,35 @@ USE vk;
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
-	id SERIAL PRIMARY KEY, -- SERIAL = BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
+	id SERIAL PRIMARY KEY,
     firstname VARCHAR(50),
-    lastname VARCHAR(50) COMMENT 'Фамиль', -- COMMENT на случай, если имя неочевидное
+    lastname VARCHAR(50),
     email VARCHAR(120) UNIQUE,
     phone BIGINT, 
-    INDEX users_phone_idx(phone), -- как выбирать индексы?
+    INDEX users_phone_idx(phone),
     INDEX users_firstname_lastname_idx(firstname, lastname)
 );
 
-DROP TABLE IF EXISTS `profiles`;
-CREATE TABLE `profiles` (
-	user_id SERIAL PRIMARY KEY,
-    gender CHAR(1),
-    birthday DATE,
-	photo_id BIGINT UNSIGNED NULL,
-    created_at DATETIME DEFAULT NOW(),
-    hometown VARCHAR(100),
-    FOREIGN KEY (user_id) REFERENCES users(id) -- что за зверь в целом?
-    	ON UPDATE CASCADE -- как это работает? Какие варианты?
-    	ON DELETE restrict -- как это работает? Какие варианты?
-    -- , FOREIGN KEY (photo_id) REFERENCES media(id) -- пока рано, т.к. таблицы media еще нет
-);
+INSERT INTO `users` VALUES ('1','Ralph','Lang','bernhard.beer@example.net','306887'),
+('2','Lenna','Schultz','ledner.jean@example.com','1'),
+('3','Araceli','Lubowitz','herzog.keeley@example.com','87882'),
+('4','Hollis','Padberg','cmarks@example.org','973'),
+('5','Gianni','Rodriguez','vveum@example.com','293865183'),
+('6','Maritza','Grady','kohler.adrien@example.com','1'),
+('7','Cindy','Heathcote','maegan44@example.com','0'),
+('8','Ross','Hauck','parker.keshawn@example.com','9792280361'),
+('9','Chaz','Dickens','dereck70@example.net','176495'),
+('10','Zachery','Schamberger','asha.vandervort@example.org','65'),
+('11','Sibyl','Hoeger','marielle61@example.org','1'),
+('12','Icie','Leuschke','zpfeffer@example.com','400059'),
+('13','Maybelle','Strosin','brennon.ruecker@example.com','881248'),
+('14','Enos','Schimmel','king.nasir@example.net','0'),
+('15','Cecil','Corwin','quentin09@example.org','7169308508'),
+('16','Alexzander','Hyatt','feeney.bobbie@example.org','38'),
+('17','Eloise','Morar','edythe15@example.com','0'),
+('18','Rebekah','Roob','cathryn.schmeler@example.org','775'),
+('19','Jaime','Cormier','kkirlin@example.com','782910'),
+('20','Alia','Abshire','wintheiser.giuseppe@example.com','223686');
 
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
@@ -33,30 +40,82 @@ CREATE TABLE messages (
 	from_user_id BIGINT UNSIGNED NOT NULL,
     to_user_id BIGINT UNSIGNED NOT NULL,
     body TEXT,
-    created_at DATETIME DEFAULT NOW(), -- можно будет даже не упоминать это поле при вставке
+    created_at DATETIME DEFAULT NOW(),
     INDEX messages_from_user_id (from_user_id),
     INDEX messages_to_user_id (to_user_id),
     FOREIGN KEY (from_user_id) REFERENCES users(id),
     FOREIGN KEY (to_user_id) REFERENCES users(id)
 );
 
+INSERT INTO `messages` VALUES ('1','1','2','In provident velit nihil facere porro et rem. Aperiam iusto error doloribus quibusdam dolor dolorem a. Explicabo porro dignissimos et occaecati modi.','1974-06-22 12:32:08'),
+('2','2','1','Sit rem quaerat earum qui vero velit. Ea ut consequatur itaque provident odio. Nihil et quisquam necessitatibus quo.','1990-11-11 01:22:50'),
+('3','3','5','Est eum soluta officia eos quas. Iste aliquid excepturi iste laudantium magni ut. Rerum quia quisquam omnis eius explicabo et. Possimus qui sequi omnis similique.','2009-09-05 14:40:15'),
+('4','3','6','Distinctio molestiae veniam aut. Necessitatibus necessitatibus quae iure qui sit sapiente.','2007-12-04 20:48:17'),
+('5','3','1','Maiores eum consequuntur eum. Facilis culpa in ea repudiandae autem est doloremque voluptatum. Eos atque nulla dicta odit omnis. Ratione voluptas ducimus deleniti enim ut eos odio sequi.','2007-09-25 00:11:22'),
+('6','4','2','Eveniet deserunt vel incidunt nemo quam. Non blanditiis labore quas ut eius nihil praesentium. Ab consectetur laborum repellat molestiae fuga. Placeat ea rerum praesentium assumenda recusandae.','2011-07-01 02:53:23'),
+('7','5','3','Illo fuga incidunt id. Aut eius itaque magnam eos in. Necessitatibus voluptatem rerum aut omnis. Ipsa quaerat eum molestias blanditiis aut. Omnis ab magni distinctio qui sed voluptatem vel.','1971-06-23 05:37:50'),
+('8','19','11','Sunt sunt et inventore accusamus. Repellendus exercitationem culpa quia vel eos deleniti. Quia exercitationem est dicta debitis.','1976-03-29 08:40:27'),
+('9','19','12','Et est ea aut praesentium quidem sit id. Eligendi deserunt dicta amet et qui odio ut. Tempore at molestiae minus magnam fugiat eaque sed aperiam.','2018-05-05 09:09:10'),
+('10','12','11','Quae ullam nihil praesentium labore et laboriosam et. Et reprehenderit est sint animi dolorem facere. Sit ea qui impedit. Deleniti tenetur incidunt numquam.','1972-11-01 10:35:00'),
+('11','11','6','Est consequatur est rem molestiae dolor sequi illo. Voluptas in enim voluptatem. Et corrupti laboriosam at fugit ducimus molestiae.','1993-12-24 06:34:14'),
+('12','6','7','Repellendus dolore itaque quos cupiditate fuga. Ipsum quam vel vel voluptatem voluptate eos.','2017-07-17 05:00:17'),
+('13','8','3','Et est rerum laudantium. Sit vel laborum error dolorem. Laudantium et molestias et veniam doloremque distinctio incidunt eveniet. Reiciendis provident occaecati eos vitae omnis dolorum.','1973-01-19 15:04:02'),
+('14','2','3','Eum est fugiat eius et. Sit quaerat rerum distinctio voluptates sequi blanditiis. Illum similique est odit et a quis veniam.','1999-09-03 13:01:40'),
+('15','14','3','Rerum ea mollitia porro inventore recusandae reprehenderit. In ut non veritatis quisquam. Similique aut dignissimos esse non voluptate. Est vel culpa expedita molestiae vero et fugiat. Iusto est vero doloribus error quam temporibus in magni.','1991-08-21 17:00:22'),
+('16','17','20','Vel ullam debitis provident velit. Eius asperiores temporibus voluptates voluptates et. Sit consequatur dolorem aliquid aut minus tenetur quod quisquam.','1972-06-15 07:17:57'),
+('17','17','18','Ea similique incidunt minus deserunt aperiam. Voluptas amet voluptate iste qui. Et quis eaque et sit commodi aut. Vel commodi quia culpa nulla.','1980-07-20 16:16:31'),
+('18','18','17','Laborum et autem a est et. Adipisci ea culpa est dolorem dolores autem voluptates. Laborum dignissimos cupiditate iusto. Quod deserunt eius voluptatem corrupti mollitia sit optio et.','1972-09-17 01:40:20'),
+('19','19','9','Iusto natus veniam tenetur animi quae. Non itaque ex iure exercitationem unde.','2002-04-26 09:17:46'),
+('20','20','1','Consectetur ut itaque et vitae soluta. Voluptatem voluptates voluptatem explicabo quasi tenetur. Velit dolor aspernatur facere laborum explicabo. Hic consequatur placeat ullam non.','1983-05-28 20:58:00'),
+('21','1','20','Qui pariatur similique ut et quaerat asperiores et. Architecto iusto sunt ea. Harum culpa sed voluptatibus exercitationem sunt nesciunt reiciendis dolorem. Soluta sed velit quam illo voluptates vel.','2012-03-05 03:50:03'),
+('22','2','1','Qui eius necessitatibus repellendus dolorem odio. Sint unde earum corporis exercitationem ut quis fugit. Quia possimus ea dolorem repellat aut. Ut nihil esse eos magni accusantium vero.','1974-08-07 07:44:21'),
+('23','3','7','Excepturi eius omnis omnis consequatur harum iste ex. Labore ullam accusantium cupiditate rerum voluptatum. Quos deserunt et dolor occaecati minima ipsam consectetur. Hic aut fugit distinctio magni qui.','1977-09-16 18:04:21'),
+('24','4','5','Quia officiis aut molestiae quos est sunt. Alias ea molestiae recusandae quaerat. Minima vitae optio enim deleniti ut magni ipsam.','2001-01-25 05:24:34'),
+('25','5','7','Magni laudantium id suscipit qui facilis eum. Cumque ducimus ut odit molestiae ducimus temporibus ut. Dolorum ipsa a fuga nemo doloribus velit pariatur.','1976-10-10 15:40:27'),
+('26','8','13','Unde corrupti similique magnam eligendi. Sapiente at qui quam mollitia.','1986-04-04 22:32:09'),
+('27','13','8','Cumque qui ipsam et ut. Qui numquam asperiores est ad est impedit. Rem eveniet non accusamus error fugiat rem. Dignissimos quisquam quae illo provident non.','1985-12-11 22:34:33'),
+('28','16','6','Id nulla fuga quod ipsam. Non dignissimos qui et sint maiores qui qui. Placeat voluptatem autem ab porro est eveniet cupiditate sint.','2011-01-15 09:34:31'),
+('29','8','2','Qui provident ipsam in dolorem voluptatibus et. Sed omnis occaecati quis aliquam aliquid omnis velit. Earum odio vel est nihil sed.','1986-11-30 13:44:00'),
+('30','2','14','Repellendus omnis voluptatem ut fugit soluta natus. Aut et nobis ipsam odit aperiam dignissimos. In maxime dolorum est dolor.','1999-09-26 11:54:23'); 
+
+
 DROP TABLE IF EXISTS friend_requests;
 CREATE TABLE friend_requests (
-	-- id SERIAL PRIMARY KEY, -- изменили на композитный ключ (initiator_user_id, target_user_id)
+	
 	initiator_user_id BIGINT UNSIGNED NOT NULL,
     target_user_id BIGINT UNSIGNED NOT NULL,
-    -- `status` TINYINT UNSIGNED,
     `status` ENUM('requested', 'approved', 'unfriended', 'declined'),
-    -- `status` TINYINT UNSIGNED, -- в этом случае в коде хранили бы цифирный enum (0, 1, 2, 3...)
 	requested_at DATETIME DEFAULT NOW(),
 	confirmed_at DATETIME,
 	
     PRIMARY KEY (initiator_user_id, target_user_id),
-	INDEX (initiator_user_id), -- потому что обычно будем искать друзей конкретного пользователя
+	INDEX (initiator_user_id),
     INDEX (target_user_id),
     FOREIGN KEY (initiator_user_id) REFERENCES users(id),
     FOREIGN KEY (target_user_id) REFERENCES users(id)
 );
+
+INSERT INTO `friend_requests` values ('1', '2', 'requested', '2016-10-26 04:06:21', '2015-12-20 13:06:11'),
+('2', '1', 'approved', '1999-12-02 05:29:32', '1999-09-04 18:57:15'),
+('1', '3', 'requested', '1981-06-11 07:40:02', '1970-06-09 05:08:16'),
+('2', '3', 'requested', '2016-03-13 21:17:56', '1991-05-11 07:00:28'),
+('3', '2', 'declined', '1971-12-07 07:23:49', '2008-04-19 00:35:51'),
+('1', '6', 'requested', '1974-03-15 21:27:02', '2010-01-26 14:19:38'),
+('6', '1', 'approved', '2015-08-01 19:37:32', '1997-03-28 08:57:44'),
+('8', '2', 'requested', '1992-06-17 16:01:14', '2013-09-28 20:13:29'),
+('2', '8', 'approved', '2012-11-25 17:52:29', '1972-07-29 17:34:12'),
+('10', '11', 'unfriended', '1975-01-17 09:16:13', '1982-06-25 14:29:54'),
+('11', '10', 'unfriended', '2018-02-03 12:24:27', '1985-09-06 07:42:06'),
+('12', '13', 'requested', '1990-11-22 17:05:37', '1989-08-02 19:58:16'),
+('13', '12', 'approved', '1983-09-10 21:20:48', '1977-11-08 04:36:33'),
+('14', '16', 'requested', '2009-01-24 09:45:24', '1975-11-20 10:30:38'),
+('15', '12', 'unfriended', '1981-04-04 00:57:17', '2003-04-30 14:51:40'),
+('16', '14', 'approved', '1984-05-20 08:21:11', '1994-08-26 01:34:07'),
+('17', '19', 'requested', '2019-09-16 01:52:12', '2011-09-26 17:13:17'),
+('18', '20', 'unfriended', '2011-06-13 18:52:55', '1983-03-18 00:20:58'),
+('19', '17', 'approved', '2007-12-07 16:47:20', '2019-08-28 17:15:14'),
+('20', '18', 'declined', '1981-05-23 15:51:15', '1994-04-12 09:43:44');
+
 
 DROP TABLE IF EXISTS communities;
 CREATE TABLE communities(
@@ -66,15 +125,99 @@ CREATE TABLE communities(
 	INDEX communities_name_idx(name)
 );
 
+INSERT INTO `communities` VALUES ('15','accusantium'),
+('17','accusantium'),
+('21','alias'),
+('22','beatae'),
+('13','dolores'),
+('3','ea'),
+('5','eligendi'),
+('4','et'),
+('16','hic'),
+('18','libero'),
+('30','libero'),
+('26','magnam'),
+('9','maxime'),
+('28','minus'),
+('20','molestiae'),
+('1','possimus'),
+('19','praesentium'),
+('23','praesentium'),
+('10','quia'),
+('25','quia'),
+('12','quo'),
+('2','ratione'),
+('27','reiciendis'),
+('6','rem'),
+('7','sequi'),
+('24','similique'),
+('11','suscipit'),
+('14','totam'),
+('8','ut'),
+('29','voluptatum');
+
 DROP TABLE IF EXISTS users_communities;
 CREATE TABLE users_communities(
 	user_id BIGINT UNSIGNED NOT NULL,
 	community_id BIGINT UNSIGNED NOT NULL,
   
-	PRIMARY KEY (user_id, community_id), -- чтобы не было 2 записей о пользователе и сообществе
+	PRIMARY KEY (user_id, community_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (community_id) REFERENCES communities(id)
 );
+
+INSERT INTO `users_communities` VALUES ('1','1'),
+('1','11'),
+('1','21'),
+('2','2'),
+('2','12'),
+('2','22'),
+('3','3'),
+('3','13'),
+('3','23'),
+('4','4'),
+('4','14'),
+('4','24'),
+('5','5'),
+('5','15'),
+('5','25'),
+('6','6'),
+('6','16'),
+('6','26'),
+('7','7'),
+('7','17'),
+('7','27'),
+('8','8'),
+('8','18'),
+('8','28'),
+('9','9'),
+('9','19'),
+('9','29'),
+('10','10'),
+('10','20'),
+('10','30'),
+('11','1'),
+('11','11'),
+('12','2'),
+('12','12'),
+('13','3'),
+('13','13'),
+('14','4'),
+('14','14'),
+('15','5'),
+('15','15'),
+('16','6'),
+('16','16'),
+('17','7'),
+('17','17'),
+('18','8'),
+('18','18'),
+('19','9'),
+('19','19'),
+('20','10'),
+('20','20');
+
+
 
 DROP TABLE IF EXISTS media_types;
 CREATE TABLE media_types(
@@ -82,9 +225,18 @@ CREATE TABLE media_types(
     name VARCHAR(255),
     created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-
-    -- записей мало, поэтому индекс будет лишним (замедлит работу)!
 );
+
+INSERT INTO `media_types` VALUES ('1','autem','2008-01-22 20:42:11','1998-04-08 21:27:33'),
+('2','sed','2011-10-21 13:46:13','2000-01-05 05:37:09'),
+('3','occaecati','1983-01-11 14:50:04','1992-03-30 01:36:37'),
+('4','dolor','2015-09-06 20:16:57','2003-09-20 22:54:50'),
+('5','explicabo','1984-11-28 05:09:38','1980-08-24 17:31:17'),
+('6','sed','1998-04-16 01:10:52','1994-04-19 07:33:21'),
+('7','nesciunt','2004-03-24 19:32:16','2020-01-27 21:55:45'),
+('8','neque','1990-01-20 13:55:46','1985-06-24 23:13:58'),
+('9','molestias','1987-07-08 08:45:12','2012-07-11 20:51:59'),
+('10','provident','1994-09-06 15:36:30','2003-05-04 11:12:41'); 
 
 DROP TABLE IF EXISTS media;
 CREATE TABLE media(
@@ -97,31 +249,137 @@ CREATE TABLE media(
 	metadata JSON,
     created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	
-    
     INDEX (user_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (media_type_id) REFERENCES media_types(id)
 );
+
+INSERT INTO `media` VALUES ('1','1','1','Culpa harum qui aut pariatur. Repellat cum quia incidunt aperiam. Ut rem repudiandae est. Non iure culpa adipisci sint sapiente sunt ipsa.','ut','0',NULL,'1980-11-06 01:37:43','2006-03-14 15:24:09'),
+('2','2','2','Hic voluptatem voluptatem deleniti a quos explicabo illo ut. Repellat aspernatur quo necessitatibus accusamus quo non quisquam. Architecto non quis incidunt repudiandae. Illum tempore cum nemo et eius consequuntur iste. Atque ullam recusandae qui commodi ab.','et','87043',NULL,'1972-05-06 09:01:45','2018-09-17 21:03:11'),
+('3','3','3','Ad reiciendis explicabo accusantium eligendi. Asperiores reprehenderit ut ut sapiente in. Iusto iste voluptatum inventore maiores esse rerum.','autem','0',NULL,'1995-01-11 10:56:33','1997-03-14 16:16:05'),
+('4','4','4','Ipsum atque esse ratione. Suscipit voluptate facere provident ducimus sapiente in adipisci maxime. Nobis porro consectetur qui vel. Dolor culpa incidunt a occaecati.','non','6774',NULL,'2015-08-29 17:41:11','2012-01-28 11:28:13'),
+('5','5','5','Autem cumque maiores incidunt ut illo maxime. Accusamus laboriosam aut error quibusdam harum nobis et repudiandae. Ab ut eligendi autem eum ex est dolorum. Aut reprehenderit magnam quae omnis voluptatem eaque ut dolor.','nisi','5112',NULL,'1995-05-16 02:16:04','1971-12-29 16:05:11'),
+('6','6','6','Commodi magnam dolorem quibusdam. Et nostrum laborum possimus vel repudiandae nobis quasi. Laborum eveniet est officia veniam quibusdam cupiditate laudantium.','rerum','4628',NULL,'1989-03-07 19:49:38','1979-03-13 19:57:31'),
+('7','7','7','Rerum aliquid maxime maxime consequatur. Architecto ut quae fugiat ipsa. Atque aut eaque dolore fugit sint culpa quo. Nam rerum blanditiis officia occaecati fugiat ad.','corrupti','0',NULL,'1984-12-28 18:46:09','1982-06-01 16:42:30'),
+('8','8','8','Voluptatem dolores voluptatem officiis nostrum rem. Suscipit architecto reiciendis nesciunt voluptas culpa earum aut. Explicabo possimus rerum ut. Temporibus dolor sit quas vero.','necessitatibus','40',NULL,'1984-06-20 00:47:31','2013-01-09 11:49:37'),
+('9','9','9','Facilis est quidem pariatur et vel blanditiis. Commodi vitae vero dolore a vel.','quo','0',NULL,'2013-12-18 02:52:03','2015-04-17 10:53:35'),
+('10','10','10','Sint quasi vero id et. Eum reiciendis itaque rerum. Et sed inventore doloribus omnis. Vel commodi aspernatur magni at similique itaque vero.','voluptatem','49773',NULL,'1971-03-26 20:31:17','2009-08-08 11:36:48'),
+('11','1','11','Quae qui vel optio et accusantium. Et autem blanditiis cumque. Adipisci quo ut suscipit distinctio deserunt hic quia qui. Autem recusandae dolore eligendi quibusdam ullam quisquam.','quibusdam','22631',NULL,'1997-12-27 00:59:57','1992-12-12 05:14:25'),
+('12','2','12','Quis quas harum ut fugit. Est fugit sed et voluptatem rerum aspernatur. Architecto facilis omnis quos dolores nihil ut ratione. Et omnis quia asperiores eius. Impedit iste quo voluptatum aliquam aliquid sint aut suscipit.','voluptatem','6595',NULL,'1983-09-11 01:13:30','1985-11-11 02:26:42'),
+('13','3','13','Ipsa veniam voluptates dolor facere delectus aut sunt. Deleniti molestias iste ea voluptatem odit. Autem eum sint ea excepturi fuga corporis.','adipisci','20121',NULL,'2005-08-05 14:26:19','1988-10-24 05:56:47'),
+('14','4','14','Eveniet qui sint voluptatem fuga et nihil est. Nam laboriosam magnam laudantium necessitatibus at. Veniam magni maiores pariatur sit dolorum dignissimos at. Reprehenderit distinctio voluptatem esse cumque.','voluptates','7',NULL,'2008-06-21 14:45:24','2015-09-16 05:34:39'),
+('15','5','15','Ratione ipsam eos in ut. Rerum eius quibusdam tempora est consequatur. Esse laboriosam repellendus fugiat at atque aut enim consequatur. Et aperiam delectus laudantium accusantium esse qui veritatis iusto.','occaecati','527',NULL,'1994-12-21 22:45:13','2013-11-08 14:09:17'),
+('16','6','16','Quia ex autem asperiores nesciunt animi modi. Id tempore aperiam autem harum voluptatem. Omnis commodi odit et sunt autem hic.','itaque','116602',NULL,'1986-03-04 20:11:12','2001-12-14 23:26:48'),
+('17','7','17','Inventore saepe dolorem quo aperiam ipsa fugiat. Non ut voluptate optio a repellendus ullam cumque. Ea quisquam maxime eum odio. Nostrum nobis at repellendus explicabo inventore quam.','in','3',NULL,'1998-10-12 05:18:31','2014-11-24 11:17:07'),
+('18','8','18','Non impedit voluptatem voluptatem vitae soluta debitis earum. Voluptatem tempore et sed tempora culpa voluptatem.','rem','88',NULL,'2006-11-15 03:22:42','1988-06-24 12:08:17'),
+('19','9','19','Assumenda eaque velit id sint omnis. Eos rem velit voluptas autem. Animi et tenetur ut sequi et qui id. Qui beatae quam id et. Sapiente numquam molestiae veritatis quo magni.','facere','949645',NULL,'1993-11-28 04:52:36','2012-04-13 10:42:02'),
+('20','10','20','Magni in non mollitia velit. Et quam quod voluptatem quia natus. Quidem voluptatem rem maxime aut omnis sint consequuntur et.','expedita','29170263',NULL,'2001-12-20 18:07:37','1999-08-24 12:52:23'),
+('21','1','1','Iusto excepturi exercitationem quae in quidem. Eius quos incidunt tempore qui sed illo. Architecto est quo ipsum velit vel sunt. Dolor officiis vitae nulla quod dolor totam. Mollitia labore iste sit dolor dicta tempore.','non','1',NULL,'1982-04-04 18:09:36','1978-02-15 20:58:07'),
+('22','2','2','Ex enim quis sit iure. Ut occaecati quis omnis delectus praesentium fuga qui. Eos quia vero nisi ab minus et. Perferendis recusandae ullam tenetur et totam non a.','veniam','694354',NULL,'2002-09-30 07:25:24','1970-03-23 10:12:02'),
+('23','3','3','Debitis enim optio at eligendi ratione. Dicta eaque amet vel neque. Nemo nobis eum ut. Laudantium adipisci nemo quo aut ipsa.','nemo','5',NULL,'1982-03-27 15:00:50','1991-06-09 08:02:05'),
+('24','4','4','Quibusdam architecto voluptatem at commodi impedit pariatur. Sapiente et quae odio aut voluptatem dolorum fugiat iure. Incidunt et quaerat aut dignissimos. Ratione id quis quasi totam dolore aut. Deserunt molestiae quisquam blanditiis est doloremque.','enim','525122',NULL,'2004-11-16 04:01:33','1994-04-17 19:39:19'),
+('25','5','5','Eos nisi ut non eum. Minima quia perferendis eos dolores perferendis perspiciatis. Et error nulla asperiores tempora harum debitis. Et id omnis modi maiores ex totam.','veniam','211',NULL,'1992-05-23 21:33:59','1973-02-13 10:47:38'),
+('26','6','6','Ad mollitia dignissimos est aut dolore. Et nihil et quia voluptas dolor magnam minus. Ut accusantium delectus asperiores atque.','laboriosam','81',NULL,'1992-07-24 14:02:27','1983-09-29 08:42:22'),
+('27','7','7','Deleniti asperiores animi tenetur suscipit architecto dicta. Quo temporibus quibusdam eos et veniam praesentium fugiat. Et qui tempora quas quas. Voluptatem sunt qui modi aperiam et ex.','incidunt','669836292',NULL,'2008-11-24 14:29:33','2004-09-12 17:43:48'),
+('28','8','8','Eos blanditiis ut qui suscipit. Voluptas in ea sint impedit eos fugiat doloribus. Ab ut quia occaecati reprehenderit qui. Est autem voluptas rerum et eum laboriosam quae et. Vero beatae sint in.','fugiat','7113041',NULL,'1994-01-05 13:00:39','1988-01-12 15:06:27'),
+('29','9','9','Omnis atque est tempora et excepturi nemo. Sed quidem cupiditate incidunt modi nobis magnam repellendus. Molestiae repudiandae eaque voluptatem laborum. Et consequuntur id ab tenetur vitae et aut et. Cum qui aut neque quidem nostrum.','et','47447',NULL,'2006-08-30 06:51:37','1976-07-29 21:55:44'),
+('30','10','10','Sed provident nisi consectetur quasi cumque aliquam fugiat. Omnis rerum sit sit quo quis. Laboriosam et vitae quasi perferendis aut. Aliquid doloribus autem repudiandae cumque rerum officia suscipit.','occaecati','1213822',NULL,'2000-05-07 12:05:39','1991-04-13 06:45:34'),
+('31','1','11','Ipsa non modi mollitia. Omnis repudiandae et odio eius consequuntur porro rerum. Sed tempora voluptate nihil sit ut sit. Rerum asperiores est tempore beatae consequatur.','qui','567',NULL,'2019-03-14 11:44:46','1970-08-23 12:06:39'),
+('32','2','12','Sint quo numquam officiis non quod praesentium iste. Incidunt nobis maiores voluptatum eius non. Minus recusandae nesciunt inventore et nobis veritatis ratione. Id nam ut facilis odio et exercitationem eos.','eum','67572258',NULL,'1979-03-22 01:00:15','1999-04-16 14:09:45'),
+('33','3','13','Corporis voluptatem aliquid inventore perferendis alias sed deleniti. Quibusdam eius quia sint quia sint nostrum. Distinctio velit nisi est minus. Ea iure necessitatibus et voluptatem earum pariatur voluptatum.','sed','7442',NULL,'2003-09-04 15:52:09','1970-04-04 16:09:26'),
+('34','4','14','Corrupti ut vero voluptatem culpa sit temporibus maxime. Necessitatibus molestias aliquam aut aut. Rerum architecto et odio cupiditate.','fugit','0',NULL,'1982-07-30 01:28:27','1998-10-07 12:10:05'),
+('35','5','15','Dolor fugiat quisquam maxime esse aliquam. Sapiente aut qui et iusto. Exercitationem labore ipsam suscipit eum quas adipisci sapiente.','iusto','19713767',NULL,'1993-11-27 10:25:14','1978-01-10 11:38:41'),
+('36','6','16','Ut est aperiam aut sunt. Vel explicabo tempore ipsam quod eveniet rerum aspernatur.','cumque','947310530',NULL,'1997-02-20 12:31:48','1990-07-13 03:26:00'),
+('37','7','17','Sint cupiditate aut et aut vero. Sint enim cupiditate ut praesentium ut nisi. In tenetur quia rem omnis dolores dicta ut.','consequatur','927156',NULL,'1979-09-02 15:56:30','1976-03-14 11:14:08'),
+('38','8','18','Occaecati sed sint similique labore. Aut vero nemo facere. Ad nihil exercitationem enim recusandae. Tempora repudiandae quo qui cumque facere quia eveniet.','dolores','44',NULL,'2014-01-07 11:11:59','1983-06-30 05:11:26'),
+('39','9','19','Neque omnis natus facere non dicta et sed. Dignissimos quia iste modi eius unde. Rerum incidunt in optio. In dolorem voluptates natus quia impedit ipsam suscipit.','et','7059446',NULL,'2013-05-04 17:30:25','2019-01-13 23:58:06'),
+('40','10','20','Ratione et id debitis facere ipsa molestiae. Ab ut dolores mollitia ab. Et in nostrum est rerum quia minus et.','qui','614884802',NULL,'1975-01-31 14:29:40','1983-11-27 03:10:16');
+
+DROP TABLE IF EXISTS `profiles`;
+CREATE TABLE `profiles` (
+	user_id SERIAL PRIMARY KEY,
+    gender CHAR(1),
+    birthday DATE,
+	photo_id BIGINT UNSIGNED NULL,
+    created_at DATETIME DEFAULT NOW(),
+    hometown VARCHAR(100),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+    	ON UPDATE CASCADE
+    	ON DELETE restrict,
+   	FOREIGN KEY (photo_id) REFERENCES media(id)
+);
+
+INSERT INTO `profiles` VALUES ('1','m','1998-04-01','1','1981-08-27 05:44:50','nobis'),
+('2','w','2003-02-18','2','2013-10-12 08:24:15','iure'),
+('3','m','1974-11-02','3','1974-05-05 04:10:44','explicabo'),
+('4','m','1999-02-19','4','2001-11-12 02:37:34','praesentium'),
+('5','w','1994-09-07','5','1996-01-28 10:18:59','et'),
+('6','m','1988-12-12','6','1979-09-27 00:27:01','autem'),
+('7','w','2013-09-09','7','1970-08-17 04:10:37','dolorum'),
+('8','m','1994-02-15','8','2016-07-12 00:27:44','eos'),
+('9','m','1980-09-19','9','1995-08-11 14:49:47','delectus'),
+('10','w','1980-05-01','10','1981-12-19 06:34:00','voluptatibus'),
+('11','m','1995-12-14','11','2018-06-14 12:58:02','pariatur'),
+('12','w','1985-11-28','12','1985-03-27 02:33:04','reiciendis'),
+('13','m','1978-10-18','13','1998-12-11 20:45:47','commodi'),
+('14','m','1997-09-17','14','1976-08-22 14:47:04','distinctio'),
+('15','m','1982-11-23','15','2010-01-01 11:40:57','voluptas'),
+('16','w','1972-12-29','16','1976-12-12 22:27:03','sed'),
+('17','m','2002-07-10','17','1991-07-19 02:20:40','voluptatem'),
+('18','w','2017-09-06','18','1993-10-13 05:20:50','quos'),
+('19','m','2009-05-14','19','2000-06-14 16:10:13','quis'),
+('20','w','2003-04-12','20','2010-10-24 08:12:49','a'); 
 
 DROP TABLE IF EXISTS likes;
 CREATE TABLE likes(
 	id SERIAL PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
     media_id BIGINT UNSIGNED NOT NULL,
-    created_at DATETIME DEFAULT NOW(),
-    
+    created_at DATETIME DEFAULT NOW(), 
     foreign key (user_id) references users(id),
     foreign key (media_id) references media(id)
-
-    -- PRIMARY KEY (user_id, media_id), – можно было и так вместо id в качестве PK
-  	-- слишком увлекаться индексами тоже опасно, рациональнее их добавлять по мере необходимости (напр., провисают по времени какие-то запросы)  
-	
-/* намеренно забыли, чтобы увидеть нехватку в ER-диаграмме
-    , FOREIGN KEY (user_id) REFERENCES users(id)
-    , FOREIGN KEY (media_id) REFERENCES media(id)
-*/
 );
+
+INSERT INTO `likes` VALUES ('1','1','1','2009-10-22 02:00:27'),
+('2','2','2','2013-08-06 10:23:59'),
+('3','3','3','1981-07-14 19:37:07'),
+('4','4','4','2007-07-22 11:27:55'),
+('5','5','5','1975-05-18 02:34:26'),
+('6','6','6','1996-09-22 14:23:23'),
+('7','7','7','2014-08-30 05:16:15'),
+('8','8','8','1972-11-13 06:39:06'),
+('9','9','9','1976-04-13 18:28:50'),
+('10','10','10','1993-02-04 04:32:54'),
+('11','11','11','1989-02-18 16:06:39'),
+('12','12','12','2008-08-24 08:10:37'),
+('13','13','13','1975-09-12 07:22:21'),
+('14','14','14','1979-05-01 06:11:01'),
+('15','15','15','1992-01-27 21:51:44'),
+('16','16','16','2012-02-12 16:12:39'),
+('17','17','17','1996-05-28 00:12:17'),
+('18','18','18','1996-09-03 16:00:36'),
+('19','19','19','1989-01-25 16:37:59'),
+('20','20','20','1979-05-17 16:11:17'),
+('21','1','21','1998-01-18 16:06:06'),
+('22','2','22','2018-06-04 19:24:28'),
+('23','3','23','1987-06-19 22:53:48'),
+('24','4','24','2012-01-17 18:59:59'),
+('25','5','25','2019-06-20 13:18:45'),
+('26','6','26','1980-12-14 01:07:41'),
+('27','7','27','2007-08-26 01:59:16'),
+('28','8','28','1998-04-26 20:34:45'),
+('29','9','29','1982-07-16 08:00:52'),
+('30','10','30','2012-12-26 04:44:20'),
+('31','11','31','2016-08-07 14:24:05'),
+('32','12','32','1984-05-29 10:59:01'),
+('33','13','33','2014-09-16 11:50:09'),
+('34','14','34','2003-04-16 06:40:28'),
+('35','15','35','2018-10-20 19:20:31'),
+('36','16','36','2017-06-29 18:17:23'),
+('37','17','37','1990-04-01 04:30:27'),
+('38','18','38','1977-11-30 22:01:24'),
+('39','19','39','1982-03-17 09:13:37'),
+('40','20','40','1980-11-24 18:54:04');
 
 DROP TABLE IF EXISTS `photo_albums`;
 CREATE TABLE `photo_albums` (
@@ -133,6 +391,52 @@ CREATE TABLE `photo_albums` (
   	PRIMARY KEY (`id`)
 );
 
+INSERT INTO `photo_albums` VALUES ('1','beatae','1'),
+('2','expedita','2'),
+('3','error','3'),
+('4','velit','4'),
+('5','atque','5'),
+('6','quia','6'),
+('7','doloremque','7'),
+('8','veniam','8'),
+('9','dolorem','9'),
+('10','fuga','10'),
+('11','odit','11'),
+('12','deserunt','12'),
+('13','veniam','13'),
+('14','explicabo','14'),
+('15','sed','15'),
+('16','ex','16'),
+('17','quia','17'),
+('18','fugiat','18'),
+('19','doloribus','19'),
+('20','perferendis','20'),
+('21','harum','1'),
+('22','temporibus','2'),
+('23','deleniti','3'),
+('24','non','4'),
+('25','consequatur','5'),
+('26','ut','6'),
+('27','et','7'),
+('28','reprehenderit','8'),
+('29','ea','9'),
+('30','laboriosam','10'),
+('31','dolor','11'),
+('32','recusandae','12'),
+('33','quia','13'),
+('34','inventore','14'),
+('35','sunt','15'),
+('36','cumque','16'),
+('37','soluta','17'),
+('38','beatae','18'),
+('39','sed','19'),
+('40','assumenda','20'),
+('41','illo','1'),
+('42','culpa','2'),
+('43','qui','3'),
+('44','impedit','4'),
+('45','quas','5');
+
 DROP TABLE IF EXISTS `photos`;
 CREATE TABLE `photos` (
 	id SERIAL PRIMARY KEY,
@@ -143,20 +447,92 @@ CREATE TABLE `photos` (
     FOREIGN KEY (media_id) REFERENCES media(id)
 );
 
+INSERT INTO `photos` VALUES ('1','1','1'),
+('2','2','2'),
+('3','3','3'),
+('4','4','4'),
+('5','5','5'),
+('6','6','6'),
+('7','7','7'),
+('8','8','8'),
+('9','9','9'),
+('10','10','10'),
+('11','11','11'),
+('12','12','12'),
+('13','13','13'),
+('14','14','14'),
+('15','15','15'),
+('16','16','16'),
+('17','17','17'),
+('18','18','18'),
+('19','19','19'),
+('20','20','20'),
+('21','21','21'),
+('22','22','22'),
+('23','23','23'),
+('24','24','24'),
+('25','25','25'),
+('26','26','26'),
+('27','27','27'),
+('28','28','28'),
+('29','29','29'),
+('30','30','30'),
+('31','31','31'),
+('32','32','32'),
+('33','33','33'),
+('34','34','34'),
+('35','35','35'),
+('36','36','36'),
+('37','37','37'),
+('38','38','38'),
+('39','39','39'),
+('40','40','40');
+
 drop table if exists `albums`;
 create table `albums` (
 	`id` serial primary key,
 	`user_id` bigint unsigned not null,
 	`name` varchar(255),
-	`quantity` bigint unsigned,
 	
 	foreign key (user_id) references users(id)
 );
 
+INSERT INTO `albums` VALUES ('1','1','aliquid'),
+('2','2','ut'),
+('3','3','qui'),
+('4','4','deserunt'),
+('5','5','ullam'),
+('6','6','tempore'),
+('7','7','iure'),
+('8','8','ab'),
+('9','9','iste'),
+('10','10','ut'),
+('11','11','molestiae'),
+('12','12','qui'),
+('13','13','molestiae'),
+('14','14','corrupti'),
+('15','15','doloremque'),
+('16','16','quia'),
+('17','17','natus'),
+('18','18','libero'),
+('19','19','modi'),
+('20','20','aut'),
+('21','1','est'),
+('22','2','ad'),
+('23','3','eos'),
+('24','4','commodi'),
+('25','5','provident'),
+('26','6','quia'),
+('27','7','qui'),
+('28','8','eveniet'),
+('29','9','maxime'),
+('30','10','ut'),
+('31','11','officiis'),
+('32','12','repellat');
+
 drop table if exists `music`;
 create table `music` (
 	id serial primary key,
-	`added` bool,
 	`author` varchar(255),
 	`duration` time,
 	`name` varchar(255),
@@ -170,6 +546,107 @@ create table `music` (
 	foreign key (album_id) references albums(id) 
 );
 
+INSERT INTO `music` VALUES ('1','veniam','00:50:20','dolorem','1','1'),
+('2','cumque','05:12:10','explicabo','2','2'),
+('3','placeat','14:28:24','enim','3','3'),
+('4','iure','10:45:42','incidunt','4','4'),
+('5','sunt','22:42:58','et','5','5'),
+('6','voluptates','12:44:24','autem','6','6'),
+('7','nostrum','19:41:18','animi','7','7'),
+('8','aliquam','02:49:36','maiores','8','8'),
+('9','voluptas','10:28:45','rerum','9','9'),
+('10','repellendus','09:54:29','aut','10','10'),
+('11','repellat','23:27:59','dignissimos','11','11'),
+('12','deleniti','01:20:47','exercitationem','12','12'),
+('13','sunt','01:13:25','ratione','13','13'),
+('14','vel','17:55:58','quibusdam','14','14'),
+('15','nemo','05:08:36','quam','15','15'),
+('16','id','07:46:46','doloribus','16','16'),
+('17','aut','04:10:58','quibusdam','17','17'),
+('18','quia','18:49:19','quo','18','18'),
+('19','in','02:22:38','architecto','19','19'),
+('20','alias','21:37:06','eum','20','20'),
+('21','reiciendis','23:34:27','quasi','21','21'),
+('22','magnam','14:11:33','ex','22','22'),
+('23','ut','14:01:56','quis','23','23'),
+('24','quo','19:37:12','quae','24','24'),
+('25','molestiae','20:55:55','exercitationem','25','25'),
+('26','id','14:01:04','voluptatum','26','26'),
+('27','architecto','23:40:41','expedita','27','27'),
+('28','aut','08:56:56','ea','28','28'),
+('29','iure','14:09:19','facere','29','29'),
+('30','velit','19:28:06','deleniti','30','30'),
+('31','qui','21:34:24','eveniet','31','31'),
+('32','doloremque','14:35:40','totam','32','32'),
+('33','laboriosam','12:05:35','voluptatum','1','33'),
+('34','consequatur','00:35:21','aut','2','34'),
+('35','et','12:30:33','beatae','3','35'),
+('36','non','00:40:43','totam','4','36'),
+('37','omnis','21:24:42','et','5','37'),
+('38','vero','08:08:53','consequatur','6','38'),
+('39','quia','20:22:01','asperiores','7','39'),
+('40','ea','21:59:32','inventore','8','40'),
+('41','minus','01:29:44','eaque','9','1'),
+('42','enim','16:11:23','repellat','10','2'),
+('43','voluptatibus','09:31:11','nemo','11','3'),
+('44','et','08:27:24','corporis','12','4'),
+('45','nobis','01:21:46','quam','13','5'),
+('46','maiores','06:45:49','velit','14','6'),
+('47','odit','05:34:15','aliquam','15','7'),
+('48','consectetur','06:26:17','nemo','16','8'),
+('49','optio','08:52:23','quas','17','9'),
+('50','magnam','15:38:50','ea','18','10'),
+('51','officiis','21:34:58','asperiores','19','11'),
+('52','nam','02:26:13','perferendis','20','12'),
+('53','exercitationem','07:16:57','eligendi','21','13'),
+('54','sint','21:12:29','blanditiis','22','14'),
+('55','veritatis','21:12:10','accusantium','23','15'),
+('56','harum','09:04:50','quia','24','16'),
+('57','id','02:07:37','et','25','17'),
+('58','non','08:49:32','autem','26','18'),
+('59','voluptatem','14:36:47','soluta','27','19'),
+('60','optio','04:09:27','ut','28','20'),
+('61','commodi','08:16:02','voluptas','29','21'),
+('62','veniam','15:13:08','amet','30','22'),
+('63','sed','23:13:24','quia','31','23'),
+('64','dolorem','12:07:28','autem','32','24'),
+('65','aut','01:23:38','omnis','1','25'),
+('66','eveniet','23:11:08','et','2','26'),
+('67','molestiae','12:26:07','vel','3','27'),
+('68','rerum','10:11:08','aut','4','28'),
+('69','et','05:03:05','omnis','5','29'),
+('70','minus','20:29:00','id','6','30'),
+('71','modi','18:54:32','enim','7','31'),
+('72','cupiditate','23:35:29','blanditiis','8','32'),
+('73','id','06:20:41','reiciendis','9','33'),
+('74','beatae','12:46:45','quo','10','34'),
+('75','iure','00:02:53','nemo','11','35'),
+('76','fugiat','17:37:21','ex','12','36'),
+('77','ipsam','05:43:03','sed','13','37'),
+('78','beatae','20:35:32','sunt','14','38'),
+('79','veritatis','03:46:01','qui','15','39'),
+('80','repudiandae','09:12:12','velit','16','40'),
+('81','nesciunt','15:56:23','sit','17','1'),
+('82','minima','22:30:34','inventore','18','2'),
+('83','aut','18:28:54','illo','19','3'),
+('84','adipisci','10:16:50','consectetur','20','4'),
+('85','laboriosam','10:18:43','earum','21','5'),
+('86','quam','00:13:06','earum','22','6'),
+('87','quibusdam','13:21:14','aspernatur','23','7'),
+('88','voluptate','12:20:57','ut','24','8'),
+('89','temporibus','18:26:05','illo','25','9'),
+('90','fugiat','18:43:12','sunt','26','10'),
+('91','voluptatibus','09:39:05','officia','27','11'),
+('92','aspernatur','13:30:39','maxime','28','12'),
+('93','est','04:13:54','dolorum','29','13'),
+('94','et','05:04:59','quibusdam','30','14'),
+('95','voluptatem','03:27:53','culpa','31','15'),
+('96','error','16:16:02','eius','32','16'),
+('97','animi','17:42:38','libero','1','17'),
+('98','sunt','05:41:31','dicta','2','18'),
+('99','veritatis','15:49:28','corrupti','3','19'),
+('100','corporis','17:15:04','et','4','20');
+
 drop table if exists `news`;
 create table `news` (
 	`id` serial primary key,
@@ -181,8 +658,48 @@ create table `news` (
 	index(community_id),
 	foreign key (community_id) references communities(id)
 	on delete cascade
-	
 );
+
+INSERT INTO `news` VALUES ('1','1','non','Et rerum modi molestiae quae. Voluptate dolor aliquid aliquid voluptate. Nam aut ad hic dolorum.','2015-07-01 09:32:41'),
+('2','2','et','Tempore molestiae et cum sapiente nulla quidem. Accusantium veritatis itaque ullam vel dolor. Beatae autem voluptate molestiae numquam eius.','2012-06-18 22:11:28'),
+('3','3','et','Fugiat dolorum rerum perferendis qui repellat placeat et est. Qui nam voluptatem assumenda asperiores et nobis aperiam. Ipsum ullam accusamus eveniet aut nesciunt. Sequi sit molestiae blanditiis sapiente ratione.','1993-11-21 03:17:28'),
+('4','4','possimus','Quia magni voluptatem nam est maxime soluta. Temporibus numquam atque non sed tempora non. Quia qui labore voluptatem nam et illo optio non.','1991-05-29 05:41:09'),
+('5','5','reprehenderit','Inventore iure et pariatur asperiores est consequatur iste est. Voluptas error placeat ut itaque. Non facilis omnis accusantium libero rerum cumque sint.','2000-01-24 19:10:00'),
+('6','6','neque','Expedita natus quia et quam exercitationem totam tempora quisquam. Harum fugit aspernatur a voluptatem. Magnam quia maiores voluptates. Aperiam sed nam explicabo mollitia esse aut laudantium. Voluptas harum quam et quas et minima numquam.','2004-05-12 04:30:34'),
+('7','7','odit','Dolorem ut aperiam nihil sed. Ab quod soluta recusandae pariatur qui. Illum dolore quo magnam sequi facere.','2018-09-07 22:09:28'),
+('8','8','perferendis','Molestiae vitae rerum veniam ut vitae sapiente. Quia non repellendus dolorem quia et quisquam nisi. Et laborum est est enim.','2001-07-01 19:09:27'),
+('9','9','amet','Quis fugiat dolor reiciendis blanditiis voluptates. Quos quas necessitatibus eveniet quo quo laudantium. Autem consectetur illo tempora suscipit. Eligendi fugit a nihil.','1975-08-07 17:11:55'),
+('10','10','sunt','Facilis autem enim necessitatibus et. Iure doloremque in possimus blanditiis corporis voluptatem laborum et.','2004-01-16 21:24:23'),
+('11','11','iste','Error quos nam nemo hic. Cumque qui qui ut eius quas. Aliquid minus nostrum qui esse et. Sed molestias sit delectus ipsa quis excepturi.','2008-06-24 06:52:59'),
+('12','12','quam','Recusandae et delectus voluptatem eligendi et blanditiis nulla impedit. Assumenda qui qui consequatur magni voluptas. Fugit officia aperiam consequatur omnis. Animi nemo perferendis molestiae quia. Ea qui facilis qui aut nihil.','1970-01-09 23:43:30'),
+('13','13','voluptatem','Sapiente libero quidem voluptatem ipsa quia. Vero aut modi culpa nihil. Dolore quis quis et. Eum dolorum eveniet neque optio quos sed ex. Ratione iure architecto itaque est aut doloribus quas.','2012-03-20 18:48:39'),
+('14','14','reiciendis','Sunt officiis maiores laudantium voluptatum est et explicabo. Ut in et autem sed modi. Nam nobis odio blanditiis pariatur voluptates amet. Molestiae modi quidem dolorum. Aliquam ex similique beatae quidem.','1998-08-18 22:36:01'),
+('15','15','rerum','Voluptatem corporis beatae suscipit quis esse quod. Dolores doloribus atque accusantium enim assumenda. Animi explicabo consequatur dolorem modi. Facere vitae architecto molestias voluptas.','2007-01-15 23:01:41'),
+('16','16','unde','Eos expedita dolores et corrupti recusandae perferendis magni. Aut quia sit qui commodi. Nihil facilis labore qui omnis eveniet laborum inventore possimus. Qui minus et delectus esse nesciunt reprehenderit.','2005-08-02 03:31:59'),
+('17','17','quibusdam','Voluptatem dolorum quia fugiat perferendis. Aliquid aut quasi et nihil in. Laboriosam ratione impedit quo minus facere unde culpa. Aut aspernatur autem iure expedita nemo.','1989-01-14 22:31:52'),
+('18','18','asperiores','Sapiente nisi architecto magnam libero natus cum est. Aliquid qui voluptas repudiandae nemo tempore accusamus voluptatem sapiente. Recusandae eum est et ratione ad. Praesentium aut perspiciatis rerum dolorem ullam eos nihil.','1988-07-15 14:52:55'),
+('19','19','est','Libero odit reprehenderit ex voluptatem nemo doloribus. Perferendis eum nemo omnis inventore expedita fugit vero et. Tempore aspernatur praesentium aut velit optio error molestiae tenetur. Quae voluptatum voluptas tenetur accusantium.','1988-02-02 12:28:18'),
+('20','20','ratione','Impedit sequi voluptatem debitis quam possimus. Natus quis placeat nihil saepe et veniam. Quae hic est quia quo autem sit. Voluptatem perferendis ad accusantium quibusdam consequatur amet.','1983-12-29 01:30:12'),
+('21','1','alias','Qui eos suscipit nisi. Odio non est rerum reprehenderit. Nulla sunt consequatur sed labore.','1982-03-05 10:21:30'),
+('22','2','iusto','Repellat autem ratione tenetur quasi voluptas. Voluptas nobis et unde nulla. Aspernatur consectetur sint enim ex incidunt repudiandae. Aut unde assumenda eligendi eos et facilis autem provident.','1999-11-10 13:08:39'),
+('23','3','et','Animi quia possimus tempora velit numquam repudiandae molestiae. Alias molestiae nisi qui dolorem sit soluta eligendi. Laborum ea placeat perspiciatis excepturi illum nemo doloremque repellendus. Pariatur saepe sed non.','2019-04-22 18:48:54'),
+('24','4','dolor','Itaque in quia unde. Magni eos explicabo veritatis aut dolorum quis ex. Optio eos deleniti consequuntur qui.','1995-01-30 02:31:30'),
+('25','5','sit','Maxime soluta architecto totam nihil adipisci. Molestiae quaerat est accusamus ipsum ex voluptatem voluptatem. Sed alias ratione ut sapiente minus.','1970-11-11 16:22:50'),
+('26','6','ut','Quia quaerat aut nemo et quod sed. Occaecati reiciendis quidem impedit consequatur nihil. Voluptatibus in harum accusamus est vitae.','2014-12-04 17:15:11'),
+('27','7','excepturi','Officia quae voluptatibus amet sit ut fugit. Accusantium id soluta maiores est ipsum. Qui eos architecto architecto rerum dolores placeat. Assumenda occaecati nobis totam ullam id provident aut.','1979-09-11 03:13:10'),
+('28','8','neque','Rerum laborum incidunt adipisci necessitatibus modi dolore repudiandae. Labore ab laudantium sit autem non. Eum laudantium hic molestias praesentium aut id molestiae voluptatum.','1998-02-15 13:35:37'),
+('29','9','consequatur','Nulla quis sit atque aliquam. Autem nesciunt quia velit ducimus ratione. Qui est rerum quo voluptate repellat fugiat.','2008-07-19 12:52:20'),
+('30','10','voluptates','Voluptas laudantium a ullam repellat. Voluptates doloremque et natus cum itaque. Dolor minus beatae alias est.','2015-07-01 04:56:17'),
+('31','11','quo','Reprehenderit sapiente magni laborum mollitia. Corporis numquam non quas odio. Corporis illo qui quia ab sed iure. Rerum rerum aspernatur laudantium pariatur assumenda blanditiis provident praesentium.','1970-03-05 10:08:02'),
+('32','12','voluptatem','Minus similique maxime debitis deleniti. Inventore asperiores eos nulla aut qui labore illo. Cumque et qui laborum aperiam sint voluptas at.','2008-07-02 02:20:30'),
+('33','13','omnis','Excepturi qui doloremque voluptas reprehenderit. Laboriosam nihil voluptatem sapiente accusamus consequatur veniam doloremque est. Quae voluptatem dolorum beatae maiores repellat doloremque minima.','2016-06-28 23:48:05'),
+('34','14','eius','Quod atque ut amet necessitatibus aut voluptatem. Ducimus minima maxime autem aut illo. Quia vel soluta omnis.','2010-09-18 08:45:41'),
+('35','15','eius','Dolor provident et laudantium architecto voluptatibus molestiae. Vero facere eius numquam nulla aperiam. Ipsa esse sequi dolorum est sapiente. Quasi quam occaecati nesciunt et.','1980-11-12 17:46:24'),
+('36','16','assumenda','Sed occaecati praesentium maiores distinctio quibusdam quisquam. Temporibus voluptate omnis quo in ut officia at molestiae. Ut est tenetur magni sed et.','1995-12-18 03:34:02'),
+('37','17','et','Eius et incidunt eum et itaque. Est nihil in voluptatem quo ab nam. Maiores est libero quae aspernatur iusto incidunt consequatur. Possimus velit consectetur molestias laborum sit.','1998-10-02 03:28:38'),
+('38','18','voluptas','Ullam est assumenda dolor architecto eaque similique. Et quas qui non earum.','2008-11-24 09:42:25'),
+('39','19','voluptas','Repellat est accusamus fugiat laboriosam aliquam. Corporis dolores harum impedit veritatis voluptatem sint quam esse. Quaerat delectus sapiente inventore laborum.','1976-05-26 22:57:21'),
+('40','20','vitae','Id voluptas voluptas ea molestiae repellat atque modi explicabo. Eum dolorem qui fugit veritatis enim fuga consectetur quae. Ut repudiandae eaque et est hic eveniet.','1974-03-04 15:08:17');
 
 drop table if exists `feed`;
 create table `feed` (
@@ -192,4 +709,69 @@ create table `feed` (
 	foreign key (user_id) references users(id),
 	foreign key (news_id) references news(id) 
 );
+
+INSERT INTO `feed` VALUES ('1','1'),
+('2','2'),
+('3','3'),
+('4','4'),
+('5','5'),
+('6','6'),
+('7','7'),
+('8','8'),
+('9','9'),
+('10','10'),
+('11','11'),
+('12','12'),
+('13','13'),
+('14','14'),
+('15','15'),
+('16','16'),
+('17','17'),
+('18','18'),
+('19','19'),
+('20','20'),
+('1','21'),
+('2','22'),
+('3','23'),
+('4','24'),
+('5','25'),
+('6','26'),
+('7','27'),
+('8','28'),
+('9','29'),
+('10','30'),
+('11','31'),
+('12','32'),
+('13','33'),
+('14','34'),
+('15','35'),
+('16','36'),
+('17','37'),
+('18','38'),
+('19','39'),
+('20','40'),
+('1','1'),
+('2','2'),
+('3','3'),
+('4','4'),
+('5','5'),
+('6','6'),
+('7','7'),
+('8','8'),
+('9','9'),
+('10','10'),
+('11','11'),
+('12','12'),
+('13','13'),
+('14','14'),
+('15','15'),
+('16','16'),
+('17','17'),
+('18','18'),
+('19','19'),
+('20','20');
+
+
+
+
 
