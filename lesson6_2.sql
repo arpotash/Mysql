@@ -25,3 +25,27 @@ union
 (initiator_user_id = 1 and status = 'approved')))
 group by from_user_id, to_user_id
 order by count(*) desc
+
+-- Попытался найти самого залайканного пользователя < 10 лет, не работает, если одну media_id
+-- лайкают больше 1 раза
+
+select user_id, count(id) from media
+where user_id in 
+(select user_id from profiles where timestampdiff(year, birthday, now()) <10)
+and id in 
+(select media_id from likes)
+group by user_id
+
+
+-- Определить кто больше поставил лайков (всего) - мужчины или женщины?
+
+select count(user_id) as m_w from likes
+where user_id in 
+(select user_id from media where user_id in
+(select user_id from profiles where gender = 'm'))
+union 
+select count(user_id) from likes
+where user_id in 
+(select user_id from media where user_id in
+(select user_id from profiles where gender = 'w'))
+order by m_w desc
