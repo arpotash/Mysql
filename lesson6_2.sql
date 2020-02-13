@@ -1,12 +1,23 @@
--- РџРѕРґСЃС‡РёС‚Р°С‚СЊ РѕР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р»Р°Р№РєРѕРІ, РєРѕС‚РѕСЂС‹Рµ РїРѕР»СѓС‡РёР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»Рё РјР»Р°РґС€Рµ 10 Р»РµС‚..
+-- Попытался найти самого залайканного пользователя < 10 лет, не работает, если одну media_id
+-- лайкают больше 1 раза
+
+select user_id, count(id) from media
+where user_id in 
+(select user_id from profiles where timestampdiff(year, birthday, now()) <10)
+and id in 
+(select media_id from likes)
+group by user_id
+
+
+-- Подсчитать общее количество лайков, которые получили пользователи младше 10 лет..
 
 select count(*) from likes
 where media_id in 
 (select id from media where user_id in 
 (select user_id from profiles where timestampdiff(year, birthday, now()) <10))
 
--- РџСѓСЃС‚СЊ Р·Р°РґР°РЅ РЅРµРєРѕС‚РѕСЂС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ. РР· РІСЃРµС… РґСЂСѓР·РµР№ СЌС‚РѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ 
--- РЅР°Р№РґРёС‚Рµ С‡РµР»РѕРІРµРєР°, РєРѕС‚РѕСЂС‹Р№ Р±РѕР»СЊС€Рµ РІСЃРµС… РѕР±С‰Р°Р»СЃСЏ СЃ РЅР°С€РёРј РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј.
+-- Пусть задан некоторый пользователь. Из всех друзей этого пользователя 
+-- найдите человека, который больше всех общался с нашим пользователем.
 
 select count(*), from_user_id, to_user_id from messages
 where from_user_id = 1 and to_user_id in
@@ -26,26 +37,24 @@ union
 group by from_user_id, to_user_id
 order by count(*) desc
 
--- РџРѕРїС‹С‚Р°Р»СЃСЏ РЅР°Р№С‚Рё СЃР°РјРѕРіРѕ Р·Р°Р»Р°Р№РєР°РЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ < 10 Р»РµС‚, РЅРµ СЂР°Р±РѕС‚Р°РµС‚, РµСЃР»Рё РѕРґРЅСѓ media_id
--- Р»Р°Р№РєР°СЋС‚ Р±РѕР»СЊС€Рµ 1 СЂР°Р·Р°
 
-select user_id, count(id) from media
-where user_id in 
-(select user_id from profiles where timestampdiff(year, birthday, now()) <10)
-and id in 
-(select media_id from likes)
-group by user_id
+-- Определить кто больше поставил лайков (всего) - мужчины или женщины?
 
-
--- РћРїСЂРµРґРµР»РёС‚СЊ РєС‚Рѕ Р±РѕР»СЊС€Рµ РїРѕСЃС‚Р°РІРёР» Р»Р°Р№РєРѕРІ (РІСЃРµРіРѕ) - РјСѓР¶С‡РёРЅС‹ РёР»Рё Р¶РµРЅС‰РёРЅС‹?
-
-select count(user_id) as m_w from likes
-where user_id in 
+select if 
+((select count(user_id) 
+from likes
+where user_id in
 (select user_id from media where user_id in
 (select user_id from profiles where gender = 'm'))
-union 
-select count(user_id) from likes
+>
+(select count(user_id) 
+from likes
 where user_id in 
 (select user_id from media where user_id in
+(select user_id from profiles where gender = 'w')))),'women', 'men') as resultat;
+
+select count(user_id) 
+from likes
+where user_id in
+(select user_id from media where user_id in
 (select user_id from profiles where gender = 'w'))
-order by m_w desc
