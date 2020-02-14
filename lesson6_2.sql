@@ -1,5 +1,5 @@
--- Попытался найти самого залайканного пользователя < 10 лет, не работает, если одну media_id
--- лайкают больше 1 раза
+-- РџРѕРїС‹С‚Р°Р»СЃСЏ РЅР°Р№С‚Рё СЃР°РјРѕРіРѕ Р·Р°Р»Р°Р№РєРѕРЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, РЅРµ СЂР°Р±РѕС‚Р°РµС‚, РµСЃР»Рё 
+-- Сѓ РїРѕСЃС‚Р° Р±РѕР»СЊС€Рµ 1 Р»Р°Р№РєР°.
 
 select user_id, count(id) from media
 where user_id in 
@@ -9,36 +9,29 @@ and id in
 group by user_id
 
 
--- Подсчитать общее количество лайков, которые получили пользователи младше 10 лет..
+-- РџРѕРґСЃС‡РёС‚Р°С‚СЊ РѕР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р»Р°Р№РєРѕРІ, РєРѕС‚РѕСЂС‹Рµ РїРѕР»СѓС‡РёР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»Рё РјР»Р°РґС€Рµ 10 Р»РµС‚.
 
 select count(*) from likes
 where media_id in 
 (select id from media where user_id in 
 (select user_id from profiles where timestampdiff(year, birthday, now()) <10))
 
--- Пусть задан некоторый пользователь. Из всех друзей этого пользователя 
--- найдите человека, который больше всех общался с нашим пользователем.
+-- РџСѓСЃС‚СЊ Р·Р°РґР°РЅ РЅРµРєРѕС‚РѕСЂС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ. РР· РІСЃРµС… РґСЂСѓР·РµР№ СЌС‚РѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅР°Р№РґРёС‚Рµ С‡РµР»РѕРІРµРєР°, 
+-- РєРѕС‚РѕСЂС‹Р№ Р±РѕР»СЊС€Рµ РІСЃРµС… РѕР±С‰Р°Р»СЃСЏ СЃ РЅР°С€РёРј РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј.
 
-select count(*), from_user_id, to_user_id from messages
-where from_user_id = 1 and to_user_id in
-(select id from users
-where id in (select initiator_user_id from friend_requests where
-(target_user_id = 1 and status = 'approved'))
-union 
-(select target_user_id from friend_requests where
-(initiator_user_id = 1 and status = 'approved')))
-or to_user_id =1 and from_user_id in
-(select id from users
-where id in (select initiator_user_id from friend_requests where
-(target_user_id = 1 and status = 'approved'))
-union 
-(select target_user_id from friend_requests where
-(initiator_user_id = 1 and status = 'approved')))
-group by from_user_id, to_user_id
+select
+	m.from_user_id,
+	concat(u.firstname, ' ', u.lastname) as owner,
+	count(*)
+from messages m
+join users u on from_user_id = u.id
+where to_user_id = 1
+group by m.from_user_id
 order by count(*) desc
+limit 1;
 
 
--- Определить кто больше поставил лайков (всего) - мужчины или женщины?
+-- РћРїСЂРµРґРµР»РёС‚СЊ РєС‚Рѕ Р±РѕР»СЊС€Рµ РїРѕСЃС‚Р°РІРёР» Р»Р°Р№РєРѕРІ (РІСЃРµРіРѕ) - РјСѓР¶С‡РёРЅС‹ РёР»Рё Р¶РµРЅС‰РёРЅС‹?
 
 select if 
 ((select count(user_id) 
@@ -52,9 +45,3 @@ from likes
 where user_id in 
 (select user_id from media where user_id in
 (select user_id from profiles where gender = 'w')))),'women', 'men') as resultat;
-
-select count(user_id) 
-from likes
-where user_id in
-(select user_id from media where user_id in
-(select user_id from profiles where gender = 'w'))
